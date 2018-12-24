@@ -6,20 +6,18 @@ from logging.config import fileConfig
 from discord import bot
 from helpers.sentry import client
 
+# Initiate Logger
+fileConfig('logging.ini')
+logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
+    """ Discord Bot """
     try:
-        # Initiate Logger
-        fileConfig('logging.ini')
-        log = logging.getLogger()
-
-        # ------------ For process scheduler ------------
-
         # Discord Bot
-        log.info('Discord Bot Starting up')
-        bot.run(log)
-        log.info('Discord Bot Finished')
+        logger.info('Discord Bot Starting up')
+        bot.run()
+        logger.info('Discord Bot Finished')
 
-    except Exception as e:
-        log.critical(e)
+    except Exception as err:
+        logger.exception(err)
         client.capture_exception()
