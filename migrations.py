@@ -43,7 +43,7 @@ def create(table: str):
 def delete(table: str):
     """ Cleanse Database """
     logger.info(f"Dropping table {table}")
-    shema.table(table).drop()
+    schema.drop(table)
     logger.info(f"Table {table} dropped")
 
 
@@ -59,5 +59,5 @@ if __name__ == "__main__":
         create(DISCORD[channel]["TABLE"])
 
     # Cleanse
-    # for channel in channels:
-    #     delete(DISCORD[channel]["TABLE"]])
+    # for channel in channels["channels"]:
+    #     delete(DISCORD[channel]["TABLE"])
