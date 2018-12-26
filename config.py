@@ -1,12 +1,23 @@
 """ Load .env file variabless """
 import os
+import sentry_sdk
 
 from orator import DatabaseManager, Model
 from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
+
+DEBUG=False
+
+# Load Environment
+if DEBUG:
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env-local')
+else:
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
+load_dotenv(dotenv_path)
 
 # Sentry Information
 SENTRY_CLIENT_KEY = os.getenv("SENTRY_CLIENT_KEY")
+sentry = sentry_sdk.init(SENTRY_CLIENT_KEY)
 
 # Discord Information
 DISCORD = {
@@ -49,17 +60,15 @@ DISCORD = {
 
 # Database information
 DATABASE={
-    "POSTGRES": {
-        "URI": os.getenv("POSTGRES_URI"),
-        "DB_NAME": os.getenv("POSTGRES_DB_NAME"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD")
-    },
-    "SQLITE": {
-        "URI": "sqlite:///webscrape.sqlite"
+    'default': {
+       'driver': "postgres",
+       'host': os.getenv("POSTGRES_HOST"),
+       'database': os.getenv("POSTGRES_DB_NAME"),
+       'user': os.getenv("POSTGRES_USER"),
+       'password': os.getenv("POSTGRES_PASSWORD"),
     }
 }
 
 # Creates Base Orator Model
 db = DatabaseManager(DATABASE)
+# schema = Schema(db)

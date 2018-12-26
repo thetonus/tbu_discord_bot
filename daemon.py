@@ -1,23 +1,38 @@
 """ The Batman Universe news Discord Bot. """
+import json
 import logging
-from logging.config import fileConfig
+import logging.config
+import os
 
 # User Imports
 from discord import bot
-from helpers.sentry import client
+
+
+def setup_logging(
+    default_path='configs/logging.json',
+    default_level=logging.INFO,
+    env_key='LOG_CFG'
+):
+    """ Setup logging configuration """
+    path = default_path
+    value = os.getenv(env_key, None)
+    if value:
+        path = value
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            config = json.load(f)
+        logging.config.dictConfig(config)
+    else:
+        logging.basicConfig(level=default_level)
+
 
 # Initiate Logger
-fileConfig('logging.ini')
+setup_logging()
 logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     """ Discord Bot """
-    try:
-        # Discord Bot
-        logger.info('Discord Bot Starting up')
-        bot.run()
-        logger.info('Discord Bot Finished')
 
-    except Exception as err:
-        logger.exception(err)
-        client.capture_exception()
+    logger.info('Discord Bot Starting up')
+    bot.run(debug=True)
+    logger.info('Discord Bot Finished')

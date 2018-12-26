@@ -5,8 +5,7 @@ from typing import Dict, List, Tuple
 import feedparser
 
 from discord import discord_api
-from helpers.sentry import client
-from settings import DISCORD, db
+from config import DISCORD, db, sentry
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +23,12 @@ def article_is_not_db(table: str, article_title: str, article_url: str, article_
 
     result = db.table(table).where("title", article_title).where(
         "link", article_url).where("published", article_date).get().serialize()
+    
     if result:
+        logger.debug(f"Article '{article_title}' not found. Needs to be imported.")
         return False
+    
+    logger.debug(f"Article '{article_title}' found. Needs not be imported.")
     return True
 
 
@@ -43,7 +46,7 @@ def add_article_to_db(table: str, article_title: str, article_url: str, article_
         'link': article_url,
         'published': article_date,
     })
-
+    logger.debug(f"Article '{article_title}' inserted")
 
 def read_article_feed(table: str, FEED: str) -> List[str]:
     """ Get articles from RSS feed 
@@ -84,7 +87,7 @@ def send(hook: str, msg: str) -> None:
     hook.post()
 
 
-def run() -> None:
+def run(debug=False) -> None:
     '''This function starts the Discord Bot. It allows the user to control the runtime enviroment settings.
 
     Arguments:
@@ -116,10 +119,13 @@ def run() -> None:
                 # Sends all new posts from older to newer.
                 posts = posts[::-1]
                 for post in posts:
-                    send(DISCORD[channel]["WEBHOOK"], post)
+                    if not debug:
+                        send(DISCORD[channel]["WEBHOOK"], post)
+                    else:
+                        log.debug(f'Here is the post: {post}')
             else:
                 logger.info('No new posts')
 
     except Exception as err:
         logger.exception(err)
-        client.capture_exception()
+        sentry.captureException()
