@@ -5,7 +5,7 @@ import sentry_sdk
 from orator import DatabaseManager, Model, Schema
 from dotenv import load_dotenv, find_dotenv
 
-DEBUG=True
+DEBUG=False
 
 # Load Environment
 if DEBUG:
