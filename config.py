@@ -2,10 +2,10 @@
 import os
 import sentry_sdk
 
-from orator import DatabaseManager, Model
+from orator import DatabaseManager, Model, Schema
 from dotenv import load_dotenv, find_dotenv
 
-DEBUG=False
+DEBUG=True
 
 # Load Environment
 if DEBUG:
@@ -61,14 +61,14 @@ DISCORD = {
 # Database information
 DATABASE={
     'default': {
-       'driver': "postgres",
-       'host': os.getenv("POSTGRES_HOST"),
-       'database': os.getenv("POSTGRES_DB_NAME"),
-       'user': os.getenv("POSTGRES_USER"),
-       'password': os.getenv("POSTGRES_PASSWORD"),
+       'driver': os.getenv("DB_DRIVER"),
+       'host': os.getenv("DB_HOST"),
+       'database': os.getenv("DB_NAME"),
+       'user': os.getenv("DB_USER"),
+       'password': os.getenv("DB_PASSWORD"),
     }
 }
 
 # Creates Base Orator Model
 db = DatabaseManager(DATABASE)
-# schema = Schema(db)
+schema = Schema(db)

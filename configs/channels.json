@@ -1,0 +1,11 @@
+{
+    "channels": [
+        "NEWS_COMICS",
+        "NEWS_MOVIE",
+        "NEWS_TV",
+        "NEWS_VIDEOGAMES",
+        "NEWS_MERCH",
+        "NEWS_GENERAL",
+        "PODCAST_COMICS"
+    ]
+}

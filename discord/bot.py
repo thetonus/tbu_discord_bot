@@ -1,13 +1,17 @@
 """ TBU Discord Bot  """
+import json
 import logging
+import os
 from typing import Dict, List, Tuple
 
 import feedparser
+import sentry_sdk
 
-from discord import discord_api
 from config import DISCORD, db, sentry
+from discord import discord_api
 
 logger = logging.getLogger(__name__)
+
 
 def article_is_not_db(table: str, article_title: str, article_url: str, article_date: str) -> bool:
     """ Check if a given pair of article title and date
@@ -23,11 +27,12 @@ def article_is_not_db(table: str, article_title: str, article_url: str, article_
 
     result = db.table(table).where("title", article_title).where(
         "link", article_url).where("published", article_date).get().serialize()
-    
+
     if result:
-        logger.debug(f"Article '{article_title}' not found. Needs to be imported.")
+        logger.debug(
+            f"Article '{article_title}' not found. Needs to be imported.")
         return False
-    
+
     logger.debug(f"Article '{article_title}' found. Needs not be imported.")
     return True
 
@@ -48,6 +53,7 @@ def add_article_to_db(table: str, article_title: str, article_url: str, article_
     })
     logger.debug(f"Article '{article_title}' inserted")
 
+
 def read_article_feed(table: str, FEED: str) -> List[str]:
     """ Get articles from RSS feed 
 
@@ -59,7 +65,7 @@ def read_article_feed(table: str, FEED: str) -> List[str]:
         posts {list} -- List of new posts to send
 
     """
-    
+
     posts = list()
     raw_feed = feedparser.parse(FEED)
     # Gets the lastest 20 feeds - if not it would download all posts.
@@ -99,21 +105,16 @@ def run(debug=False) -> None:
     '''
 
     # All the Discord Channels that I care about
-    channels = set([
-        "NEWS_COMICS",
-        "NEWS_MOVIE",
-        "NEWS_TV",
-        "NEWS_VIDEOGAMES",
-        "NEWS_MERCH",
-        "NEWS_GENERAL",
-        "PODCAST_COMICS",
-    ])
+    ROOT_DIR = os.getcwd()  # This is your Project Root
+    with open(f'{ROOT_DIR}/configs/channels.json') as f:
+        data = f.read()
+        channels = json.loads(data)
 
     try:
-        for channel in channels:
+        for channel in channels["channels"]:
             logger.info(f'Seeing if {channel} needs to be updated.')
             posts = read_article_feed(
-                DISCORD[channel]["TABLE"].lower(), DISCORD[channel]["FEED"])
+                DISCORD[channel]["TABLE"], DISCORD[channel]["FEED"])
             if len(posts) > 0:
                 logger.info(f'{channel} needs to be updated.')
                 # Sends all new posts from older to newer.
@@ -128,4 +129,4 @@ def run(debug=False) -> None:
 
     except Exception as err:
         logger.exception(err)
-        sentry.captureException()
+        sentry_sdk.capture_exception()

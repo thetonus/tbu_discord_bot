@@ -34,5 +34,5 @@ if __name__ == '__main__':
     """ Discord Bot """
 
     logger.info('Discord Bot Starting up')
-    bot.run(debug=True)
+    bot.run()
     logger.info('Discord Bot Finished')
