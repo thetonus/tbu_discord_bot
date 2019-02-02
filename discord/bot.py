@@ -8,7 +8,7 @@ from typing import Dict, List, Tuple
 import feedparser
 import sentry_sdk
 
-from config import DISCORD, db, sentry
+from config import DISCORD, db
 from discord import discord_api
 
 logger = logging.getLogger(__name__)
@@ -73,7 +73,8 @@ def read_article_feed(table: str, FEED: str) -> List[str]:
     feed = raw_feed['entries'][0:20]
     for article in feed:
         if article_is_not_db(table, article['title'], article['link'], article['published']):
-            posts.append({'link': article['link'], 'published': article['published']})
+            posts.append(
+                {'link': article['link'], 'published': article['published']})
             add_article_to_db(table,
                               article['title'],  article['link'], article['published'])
     return posts
@@ -91,7 +92,12 @@ def send(hook: str, msg: str) -> None:
     '''
 
     hook = discord_api.Webhook(hook, msg=msg)
-    hook.post()
+    result, status = hook.post()
+
+    if not result:
+        sentry_sdk.capture_message(f"A {status} error occured.")
+
+    return None
 
 
 def run(debug=False) -> None:
@@ -123,14 +129,15 @@ def run(debug=False) -> None:
                 def convert(post):
                     """ Convert published date to datetime for comparison """
                     date_str = post["published"][:-6]
-                    post["published"] = datetime.datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S').date()
+                    post["published"] = datetime.datetime.strptime(
+                        date_str, '%a, %d %b %Y %H:%M:%S').date()
                     return post
 
                 # Convert Post's date to datetime
                 posts = [convert(post) for post in posts]
 
                 # Sort posts based on oldest to newest
-                posts = sorted(posts, key=lambda k: k['published']) 
+                posts = sorted(posts, key=lambda k: k['published'])
 
                 for post in posts:
                     if not debug:

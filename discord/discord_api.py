@@ -1,10 +1,12 @@
 """ Python Discord Api  """
-
+import logging
 import json
 import requests
 import time
 import datetime
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
 
 class Webhook:
 	def __init__(self, url, **kwargs):
@@ -132,14 +134,14 @@ class Webhook:
 
 		result = requests.post(self.url, data=self.json, headers=headers)
 
-		if result.status_code == 400:
-			print("Post Failed, Error 400")
-			return False
+		if result.status_code >= 400:
+			logger.info(f"Post Failed, Error {result.status_code}")
+			return False, result.status_code
 		else:
-			print("Payload delivered successfuly")
-			print("Code : "+str(result.status_code))
+			logging.info("Payload delivered successfuly")
+			logging.info(f"Code : {result.status_code}")
 			time.sleep(2)
-			return True
+			return True, result.status_code
 
 
 
