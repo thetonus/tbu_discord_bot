@@ -5,13 +5,13 @@ import sentry_sdk
 from orator import DatabaseManager, Model, Schema
 from dotenv import load_dotenv, find_dotenv
 
-DEBUG=False
+DEBUG = False
 
 # Load Environment
 if DEBUG:
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env-local')
+    dotenv_path = os.path.join(os.path.dirname(__file__), ".env-local")
 else:
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 
 load_dotenv(dotenv_path)
 
@@ -56,16 +56,51 @@ DISCORD = {
         "FEED": "http://thebatmanuniverse.net/category/podcast/tbucp/feed",
         "TABLE": "comicsPodcast",
     },
+    "BAT_BOOKS": {
+        "WEBHOOK": os.getenv("BAT_BOOKS"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/tbu-bbfb/feed",
+        "TABLE": "batBooks",
+    },
+    "BATGIRL_TO_ORACLE": {
+        "WEBHOOK": os.getenv("BATGIRL_TO_ORACLE"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/bto/feed",
+        "TABLE": "batgirlOracle",
+    },
+    "ROBIN_LOVES": {
+        "WEBHOOK": os.getenv("ROBIN_LOVES"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/reltdp/feed",
+        "TABLE": "robinLoves",
+    },
+    "BAT_FANS": {
+        "WEBHOOK": os.getenv("BAT_FANS"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/tbu-batfans/feed",
+        "TABLE": "batFans",
+    },
+    "YOUNG_JUSTICE": {
+        "WEBHOOK": os.getenv("YOUNG_JUSTICE"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/elyj/feed",
+        "TABLE": "youngJustice",
+    },
+    "GOTHAM_CHRONICLE": {
+        "WEBHOOK": os.getenv("GOTHAM_CHRONICLE"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/tgc/feed",
+        "TABLE": "gothamChronicle",
+    },
+    "TBU_COMMENTARIES": {
+        "WEBHOOK": os.getenv("TBU_COMMENTARIES"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/tbuc/feed",
+        "TABLE": "tbuCommentaries",
+    },
 }
 
 # Database information
-DATABASE={
-    'default': {
-       'driver': os.getenv("DB_DRIVER"),
-       'host': os.getenv("DB_HOST"),
-       'database': os.getenv("DB_NAME"),
-       'user': os.getenv("DB_USER"),
-       'password': os.getenv("DB_PASSWORD"),
+DATABASE = {
+    "default": {
+        "driver": os.getenv("DB_DRIVER"),
+        "host": os.getenv("DB_HOST"),
+        "database": os.getenv("DB_NAME"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
     }
 }
 
