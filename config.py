@@ -5,14 +5,9 @@ import sentry_sdk
 from orator import DatabaseManager, Model, Schema
 from dotenv import load_dotenv, find_dotenv
 
-DEBUG = False
 
 # Load Environment
-if DEBUG:
-    dotenv_path = os.path.join(os.path.dirname(__file__), ".env-local")
-else:
-    dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
-
+dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
 # Sentry Information
