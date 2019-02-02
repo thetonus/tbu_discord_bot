@@ -1,4 +1,5 @@
 """ TBU Discord Bot  """
+import datetime
 import json
 import logging
 import os
@@ -72,7 +73,7 @@ def read_article_feed(table: str, FEED: str) -> List[str]:
     feed = raw_feed['entries'][0:20]
     for article in feed:
         if article_is_not_db(table, article['title'], article['link'], article['published']):
-            posts.append(article['link'])
+            posts.append({'link': article['link'], 'published': article['published']})
             add_article_to_db(table,
                               article['title'],  article['link'], article['published'])
     return posts
@@ -117,13 +118,25 @@ def run(debug=False) -> None:
                 DISCORD[channel]["TABLE"], DISCORD[channel]["FEED"])
             if len(posts) > 0:
                 logger.info(f'{channel} needs to be updated.')
+
                 # Sends all new posts from older to newer.
-                posts = posts[::-1]
+                def convert(post):
+                    """ Convert published date to datetime for comparison """
+                    date_str = post["published"][:-6]
+                    post["published"] = datetime.datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S').date()
+                    return post
+
+                # Convert Post's date to datetime
+                posts = [convert(post) for post in posts]
+
+                # Sort posts based on oldest to newest
+                posts = sorted(posts, key=lambda k: k['published']) 
+
                 for post in posts:
                     if not debug:
-                        send(DISCORD[channel]["WEBHOOK"], post)
+                        send(DISCORD[channel]["WEBHOOK"], post['link'])
                     else:
-                        log.debug(f'Here is the post: {post}')
+                        logger.info(f"Here is the post: {post['link']}")
             else:
                 logger.info('No new posts')
 
