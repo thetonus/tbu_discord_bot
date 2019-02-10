@@ -86,6 +86,31 @@ DISCORD = {
         "FEED": "http://thebatmanuniverse.net/category/podcast/tbuc/feed",
         "TABLE": "tbuCommentaries",
     },
+    "MOVIE_EDITORIALS": {
+        "WEBHOOK": os.getenv("MOVIE_EDITORIALS"),
+        "FEED": "http://thebatmanuniverse.net/category/movie/movie-blog/feed",
+        "TABLE": "movieEditorials",
+    },
+    "TV_EDITORIALS": {
+        "WEBHOOK": os.getenv("TV_EDITORIALS"),
+        "FEED": "http://thebatmanuniverse.net/category/tv/tv-blog/feed",
+        "TABLE": "tvEditorials",
+    },
+    "VIDEO_GAME_EDITORIALS": {
+        "WEBHOOK": os.getenv("VIDEO_GAME_EDITORIALS"),
+        "FEED": "http://thebatmanuniverse.net/category/videogame/videogame-blog/feed",
+        "TABLE": "gameEditorials",
+    },
+    "MERCH_EDITORIALS": {
+        "WEBHOOK": os.getenv("MERCH_EDITORIALS"),
+        "FEED": "http://thebatmanuniverse.net/category/merchandise/merchandise-blog/feed",
+        "TABLE": "merchEditorials",
+    },
+    "GENERAL_EDIORIALS": {
+        "WEBHOOK": os.getenv("GENERAL_EDIORIALS"),
+        "FEED": "http://thebatmanuniverse.net/category/general/general-blog/feed",
+        "TABLE": "generalEditorials",
+    },
 }
 
 # Database information

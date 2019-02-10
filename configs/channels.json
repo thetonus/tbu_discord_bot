@@ -13,6 +13,11 @@
         "BAT_FANS",
         "YOUNG_JUSTICE",
         "GOTHAM_CHRONICLE",
-        "TBU_COMMENTARIES"
+        "TBU_COMMENTARIES",
+        "MOVIE_EDITORIALS",
+        "TV_EDITORIALS",
+        "VIDEO_GAME_EDITORIALS",
+        "MERCH_EDITORIALS",
+        "GENERAL_EDIORIALS"
     ]
 }
