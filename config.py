@@ -112,6 +112,11 @@ DISCORD = {
         "FEED": "http://thebatmanuniverse.net/category/general/general-blog/feed",
         "TABLE": "generalEditorials",
     },
+    "DARK_KNIGHT_IN_PROSE": {
+        "WEBHOOK": os.getenv("DARK_KNIGHT_IN_PROSE"),
+        "FEED": "http://thebatmanuniverse.net/category/podcast/tdkip/feed",
+        "TABLE": "darkKnightInProse",
+    },
 }
 
 # Database information
