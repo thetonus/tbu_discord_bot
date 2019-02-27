@@ -49,7 +49,7 @@ def delete(table: str):
 if __name__ == "__main__":
     # All the Discord Channels that I care about
     ROOT_DIR = os.getcwd()  # This is your Project Root
-    with open(f"{ROOT_DIR}/configs/channels.json") as f:
+    with open(os.path.join(ROOT_DIR, "configs", "channels.json")) as f:
         data = f.read()
         channels = json.loads(data)
 
